@@ -33,6 +33,18 @@ class Chris(simpleGE.Sprite):
             self.x -= self.moveSpeed
         if self.isKeyPressed(pygame.K_RIGHT):
             self.x += self.moveSpeed
+            
+class LblScore(simpleGE.Label):
+    def __init__(self):
+        super().__init__()
+        self.text = "Score: 0"
+        self.center = (100, 30)
+
+class LblTime(simpleGE.Label):
+    def __init__(self):
+        super().__init__()
+        self.text = "Time left: 10"
+        self.center = (500, 30)
 
 class Game(simpleGE.Scene):
     def __init__(self):
@@ -41,6 +53,13 @@ class Game(simpleGE.Scene):
 
         self.soundMoney = simpleGE.Sound("pickupCoin.wav")
         self.numMoneys = 10
+        self.score = 0
+        self.lblScore = LblScore()
+                   
+        self.timer = simpleGE.Timer()
+        self.timer.totalTime = 10
+        self.lblTime = LblTime()
+        
         self.chris = Chris(self)
 
         self.Moneys = []
@@ -48,13 +67,22 @@ class Game(simpleGE.Scene):
             self.Moneys.append(Money(self))
 
         self.sprites = [self.chris,
-                        self.Moneys]
+                        self.Moneys,
+                        self.lblScore,
+                        self.lblTime]
 
     def process(self):
         for money in self.Moneys:
             if money.collidesWith(self.chris):
                 money.reset()
                 self.soundMoney.play()
+                self.score += 1
+                self.lblScore.text = f"Score: {self.score}"
+                
+        self.lblTime.text = f"Time Left: {self.timer.getTimeLeft():.2f}"
+        if self.timer.getTimeLeft() < 0:
+            print(f"Score: {self.score}")
+            self.stop()
 
 def main():
     game = Game()
