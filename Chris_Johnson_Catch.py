@@ -13,7 +13,6 @@ class Money(simpleGE, Sprite):
         self.minSpeed = 3
         self.maxSpeed = 8
 
-
     def reset(self):
         self.y = 10
 
@@ -47,18 +46,21 @@ class Game(simpleGE, Scene):
         self.setImage("skyline.jpg")
 
         self.soundMoney = simpleGE.Sound("pickupCoin.wav")
+        self.numMoneys = 10
         self.chris = Chris(self)
-        self.Money = Money(self)
+
+        self.Moneys = []
+        for i in range(numMoney):
+            self.Money.append(Money(self))
 
         self.sprites = (self.chris,
-                        self.money)
+                        self.moneys)
 
     def process(self):
-        if self.money.collidesWith(self.chris):
-            self.money.reset()
-            self.soundMoney.play()
-
-
+        for money in self.Moneys:
+            if self.money.collidesWith(self.chris):
+                money.reset()
+                self.soundMoney.play()
 
 
 def main():
