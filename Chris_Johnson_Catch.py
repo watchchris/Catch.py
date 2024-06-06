@@ -1,67 +1,60 @@
-"""Chris Johnson
-Catch - Slide
-5/7/24
-"""
+import pygame
+import simpleGE
+import random
 
-import random, pygame, simpleGE
-
-class Money(simpleGE, Sprite):
-    def __init__(self, scene):
-        super().__init__(scene)
-        set.setImage("Money.png")
+class Money(simpleGE.Sprite):
+    def __init__(self, Scene):
+        super().__init__(Scene)
+        self.setImage("Money.png")
         self.setSize(25, 25)
         self.minSpeed = 3
         self.maxSpeed = 8
+        self.reset()
 
     def reset(self):
         self.y = 10
-
-        #x is random to screen width
         self.x = random.randint(0, self.screenWidth)
-
-        #dy is random minSpeed to maxSpeed
-        self.dy = randomrandint(self.minSpeed, self.maxSpeed)
+        self.dy = random.randint(self.minSpeed, self.maxSpeed)
 
     def checkBounds(self):
         if self.bottom > self.screenHeight:
             self.reset()
 
 class Chris(simpleGE.Sprite):
-    def __init__(self, scene):
-        super().__init__(scene)
+    def __init__(self, Scene):
+        super().__init__(Scene)
         self.setImage("Chris.png")
-        self.setSize(50, 50)
+        self.setSize(100, 100)
         self.position = (320, 400)
         self.moveSpeed = 5
 
     def process(self):
-        if self.isKeyPresses(pygame.K_LEFT):
+        if self.isKeyPressed(pygame.K_LEFT):
             self.x -= self.moveSpeed
-        if self.isKeyPresses(pygame.K_RIGHT):
+        if self.isKeyPressed(pygame.K_RIGHT):
             self.x += self.moveSpeed
 
-class Game(simpleGE, Scene):
+class Game(simpleGE.Scene):
     def __init__(self):
         super().__init__()
-        self.setImage("skyline.jpg")
+        self.setImage("skyLine.jpg")
 
         self.soundMoney = simpleGE.Sound("pickupCoin.wav")
         self.numMoneys = 10
         self.chris = Chris(self)
 
         self.Moneys = []
-        for i in range(numMoney):
-            self.Money.append(Money(self))
+        for i in range(self.numMoneys):
+            self.Moneys.append(Money(self))
 
-        self.sprites = (self.chris,
-                        self.moneys)
+        self.sprites = [self.chris,
+                        self.Moneys]
 
     def process(self):
         for money in self.Moneys:
-            if self.money.collidesWith(self.chris):
+            if money.collidesWith(self.chris):
                 money.reset()
                 self.soundMoney.play()
-
 
 def main():
     game = Game()
