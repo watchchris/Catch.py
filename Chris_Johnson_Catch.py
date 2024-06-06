@@ -6,7 +6,7 @@ Catch - Slide
 import random, pygame, simpleGE
 
 class Money(simpleGE, Sprite):
-    def __init__(self, scene)
+    def __init__(self, scene):
         super().__init__(scene)
         set.setImage("Money.png")
         self.setSize(25, 25)
@@ -45,11 +45,20 @@ class Game(simpleGE, Scene):
     def __init__(self):
         super().__init__()
         self.setImage("skyline.jpg")
+
+        self.soundMoney = simpleGE.Sound("pickupCoin.wav")
         self.chris = Chris(self)
         self.Money = Money(self)
 
         self.sprites = (self.chris,
                         self.money)
+
+    def process(self):
+        if self.money.collidesWith(self.chris):
+            self.money.reset()
+            self.soundMoney.play()
+
+
 
 
 def main():
